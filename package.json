@@ -1,13 +1,13 @@
 {
 	"name": "api-transacoes",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "",
 	"main": "index.ts",
 	"scripts": {
-		"dev": "NODE_ENV=development PORT=3000 ts-node-dev --ignore-watch node_modules src/server.ts",
+		"dev": "NODE_ENV=development PORT=3000 ts-node-dev src/server.ts",
 		"build": "NODE_ENV=development tsc",
-		"test": "NODE_ENV=development jest",
-		"sm": "NODE_ENV=development jest --watch --verbose=true --detectOpenHandles",
+		"test": "NODE_ENV=development jest --detectOpenHandles --forceExit",
+		"sm": "NODE_ENV=development jest --watch --detectOpenHandles",
 		"lint": "eslint '{src,test}/**/*.ts' --fix",
 		"migrate": "knex migrate:latest"
 	},

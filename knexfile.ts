@@ -4,7 +4,6 @@
 const knex = {
 	development: {
 		client: 'pg',
-		version: '15.1',
 		connection: {
 			host: 'localhost',
 			user: 'postgres',
@@ -16,6 +15,9 @@ const knex = {
 		},
 		seeds: {
 			directory: 'src/database/seeds',
+		},
+		pool: {
+			min: 0,
 		},
 	},
 };
