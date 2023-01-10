@@ -1,16 +1,18 @@
 import express from 'express';
 import authRoutes from '../routes/auth';
+import transactionRoutes from '../routes/transaction';
+import authenticate from './passport';
 
-const router = () => {
-	const router = express.Router();
+const protectedRouter = express.Router();
+protectedRouter.use('/transaction', transactionRoutes);
 
-	router.get('/', (req, res) => {
-		res.status(200).json({ message: 'Hello World ' });
-	});
+const router = express.Router();
 
-	router.use('/', authRoutes());
+router.get('/', (req, res) => {
+	res.status(200).json({ message: 'Hello World sz' });
+});
 
-	return router;
-};
+router.use('/', authRoutes);
+router.use('/v0', authenticate(), protectedRouter);
 
 export default router;

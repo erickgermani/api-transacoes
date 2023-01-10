@@ -1,13 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 
-const middlewares = () => {
-	const router = express.Router();
+const middlewares = express.Router();
 
-	router.use(express.json());
-	router.use(cors({ origin: '*' }));
-
-	return router;
-};
+middlewares.use(express.json());
+middlewares.use(cors({ origin: '*' }));
 
 export default middlewares;

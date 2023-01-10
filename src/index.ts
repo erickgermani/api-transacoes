@@ -9,16 +9,16 @@ import express, {
 
 import middlewares from './config/middlewares';
 import router from './config/router';
-import logger from './config/log';
+import logger from './config/logger';
 
 const app: Application = express();
 
-app.use(middlewares());
-app.use(router());
+app.use(middlewares);
+app.use(router);
 
 app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
 	// @ts-expect-error will be fixed
-	const { name, message, stack } = err; // FIXME
+	const { name, message, stack } = err; // FIXME environment type error
 
 	if (name === 'ValidationError') res.status(400).json({ error: message });
 	else if (name === 'RecursoIndevidoError') res.status(403).json({ error: message });

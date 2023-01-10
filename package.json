@@ -1,13 +1,12 @@
 {
 	"name": "api-transacoes",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "",
 	"main": "index.ts",
 	"scripts": {
-		"dev": "NODE_ENV=development PORT=3000 ts-node-dev src/server.ts",
-		"build": "NODE_ENV=development tsc",
-		"test": "NODE_ENV=development jest --detectOpenHandles --forceExit",
-		"sm": "NODE_ENV=development jest --watch --detectOpenHandles",
+		"dev": "PORT=3000 NODE_ENV=development JWT_SECRET=SUCESSO ts-node-dev src/server.ts",
+		"test": "NODE_ENV=development JWT_SECRET=SUCESSO jest --detectOpenHandles --forceExit",
+		"sm": "NODE_ENV=development JWT_SECRET=SUCESSO jest --watch --detectOpenHandles",
 		"lint": "eslint '{src,test}/**/*.ts' --fix",
 		"migrate": "knex migrate:latest"
 	},
@@ -23,7 +22,9 @@
 		"bcrypt-nodejs": "^0.0.3",
 		"consign": "^0.1.6",
 		"cors": "^2.8.5",
+		"dotenv": "^16.0.3",
 		"express": "^4.18.2",
+		"jwt-simple": "^0.5.6",
 		"knex": "^2.4.0",
 		"passport": "^0.6.0",
 		"passport-jwt": "^4.0.1",

@@ -1,9 +1,19 @@
 interface IUser {
-	id?: number;
+	id: number;
 	name: string;
 	cpf: string;
 	mail: string;
 	passwd: string;
 }
 
-export type { IUser };
+interface ITransaction {
+	id: number;
+	description: string;
+	date: string;
+	amount: number;
+	status: 'ok' | 'under_review' | 'canceled';
+	payer: number;
+	payee: number;
+}
+
+export type { IUser, ITransaction };
