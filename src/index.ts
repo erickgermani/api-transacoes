@@ -21,7 +21,8 @@ app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFuncti
 	const { name, message, stack } = err; // FIXME environment type error
 
 	if (name === 'ValidationError') res.status(400).json({ error: message });
-	else if (name === 'RecursoIndevidoError') res.status(403).json({ error: message });
+	else if (name === 'SaldoInsuficienteError' || name === 'AuthorizationError')
+		res.status(403).json({ error: message });
 	else {
 		const id = uuid();
 		logger.error({ id, name, message, stack });

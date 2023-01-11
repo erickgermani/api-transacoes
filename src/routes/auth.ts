@@ -9,7 +9,16 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const router = express.Router();
 
-router.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+const validate = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		await userService.validate(req.body);
+		next();
+	} catch (err) {
+		next(err);
+	}
+};
+
+router.post('/signup', validate, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const result = await userService.save(req.body);
 
