@@ -7,12 +7,22 @@ import userService from './user';
 const MAIN_DATABASE = 'transactions';
 
 const validate = async (t: ITransaction) => {
-	if (!t.description) throw new ValidationError('Descrição é um atributo obrigatório');
-	if (!t.amount) throw new ValidationError('Valor é um atributo obrigatório');
-	if (!t.payer) throw new ValidationError('Pagador é um atributo obrigatório');
-	if (!t.payee) throw new ValidationError('Beneficiário é um atributo obrigatório');
+	if (typeof t.description !== 'string' || !t.description.length)
+		throw new ValidationError('Descrição é um atributo string obrigatório');
+
+	if (typeof t.amount !== 'number')
+		throw new ValidationError('Valor é um atributo number obrigatório');
+
+	if (typeof t.payer !== 'number' || !t.payer)
+		throw new ValidationError('Pagador é um atributo number obrigatório');
+
+	if (typeof t.payee !== 'number' || !t.payee)
+		throw new ValidationError('Beneficiário é um atributo number obrigatório');
+
 	if (t.payer === t.payee)
-		throw new ValidationError('O pagador deve ser diferente do beneficiário');
+		throw new ValidationError('Pagador deve ser diferente do beneficiário');
+
+	if (t.amount < 0.01) throw new ValidationError('Valor deve ser maior do que R$ 0,01');
 
 	const b = await userService.getBalance(t.payer);
 	const balance = parseFloat(b.balance);

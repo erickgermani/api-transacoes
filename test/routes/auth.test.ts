@@ -12,7 +12,7 @@ beforeAll(async () => {
 	await knex('users').del();
 });
 
-describe('Ao criar uma conta', () => {
+describe('Ao tentar criar uma conta', () => {
 	let id: number;
 
 	describe('... com parâmetros válidos', () => {

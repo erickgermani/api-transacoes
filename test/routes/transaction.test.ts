@@ -49,6 +49,7 @@ beforeAll(async () => {
 	// @ts-expect-error will be fixed
 	token = jwt.encode(user, JWT_SECRET); // FIXME environment type error
 });
+
 describe('Ao enviar uma transferência válida', () => {
 	test('Deve inserir uma transferência válida', async () => {
 		const payload = {
@@ -156,17 +157,20 @@ describe('Ao transferir com parâmetros inválidos', () => {
 	};
 
 	test('Não deve efetuar uma transferência sem descrição', () =>
-		testTemplate({ description: undefined }, 'Descrição é um atributo obrigatório'));
+		testTemplate({ description: undefined }, 'Descrição é um atributo string obrigatório'));
 
 	test('Não deve efetuar uma transferência sem valor', () =>
-		testTemplate({ amount: undefined }, 'Valor é um atributo obrigatório'));
+		testTemplate({ amount: undefined }, 'Valor é um atributo number obrigatório'));
 
 	test('Não deve efetuar uma transferência sem beneficiário', () =>
-		testTemplate({ payee: undefined }, 'Beneficiário é um atributo obrigatório'));
+		testTemplate({ payee: undefined }, 'Beneficiário é um atributo number obrigatório'));
 
 	test('Não deve efetuar uma transferência entre a mesma conta', () =>
-		testTemplate({ payee: user.id }, 'O pagador deve ser diferente do beneficiário'));
+		testTemplate({ payee: user.id }, 'Pagador deve ser diferente do beneficiário'));
 
 	test('Não deve efetuar uma transferência com destinatáro inexistente', () =>
 		testTemplate({ payee: -1 }, 'Destinatário não existe'));
+
+	test('Não deve efetuar uma transferência abaixo do mínimo', () =>
+		testTemplate({ amount: 0 }, 'Valor deve ser maior do que R$ 0,01'));
 });
