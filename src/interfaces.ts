@@ -1,12 +1,19 @@
-interface IUser {
+interface IAccount {
 	id: number;
 	name: string;
-	cpf: string;
 	mail: string;
 	passwd: string;
 }
 
-interface ITransaction {
+interface IUser extends IAccount {
+	cpf: string;
+}
+
+interface IShopkeeper extends IAccount {
+	cnpj: string;
+}
+
+interface ITransfer {
 	id: number;
 	description: string;
 	date: string;
@@ -16,4 +23,4 @@ interface ITransaction {
 	payee: number;
 }
 
-export type { IUser, ITransaction };
+export type { IUser, IShopkeeper, ITransfer };

@@ -1,12 +1,12 @@
 import knex from '../database/knex';
 import SaldoInsuficienteError from '../errors/SaldoInsuficienteError';
 import ValidationError from '../errors/ValidationError';
-import { ITransaction } from '../interfaces';
+import { ITransfer } from '../interfaces';
 import userService from './user';
 
 const MAIN_DATABASE = 'transfers';
 
-const validate = async (t: ITransaction) => {
+const validate = async (t: ITransfer) => {
 	if (typeof t.description !== 'string' || !t.description.length)
 		throw new ValidationError('Descrição é um atributo string obrigatório');
 
@@ -41,7 +41,7 @@ const authorizeTransaction = async () => {
 	return await res.json();
 };
 
-const save = async (t: ITransaction) => {
+const save = async (t: ITransfer) => {
 	return await knex(MAIN_DATABASE).insert(t, ['*']);
 };
 

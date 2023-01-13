@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt-nodejs';
 import knex from '../database/knex';
 import ValidationError from '../errors/ValidationError';
 import { IUser } from '../interfaces';
+import shopkeeperService from './shopkeeper';
 
 const MAIN_DATABASE = 'users';
 
@@ -26,6 +27,11 @@ const validate = async (user: IUser) => {
 	const userSearchedByMail = await findOne({ mail: user.mail });
 
 	if (userSearchedByMail !== undefined)
+		throw new ValidationError('Já existe um usuário cadastrado com este email');
+
+	const shopkeeperSearchedByMail = await shopkeeperService.findOne({ mail: user.mail });
+
+	if (shopkeeperSearchedByMail !== undefined)
 		throw new ValidationError('Já existe um usuário cadastrado com este email');
 
 	const userSearchedByCpf = await findOne({ cpf: user.cpf });

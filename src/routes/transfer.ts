@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 
-import { ITransaction } from '../interfaces';
+import { ITransfer } from '../interfaces';
 import AuthorizationError from '../errors/AuthorizationError';
 import transferService from '../services/transfer';
 import userService from '../services/user';
@@ -21,7 +21,7 @@ const validate = async (req: Request, res: Response, next: NextFunction) => {
 router.post('/', validate, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		// @ts-expect-error will be fixed
-		const t: ITransaction = { ...req.body, payer: req.user.id }; // FIXME type error
+		const t: ITransfer = { ...req.body, payer: req.user.id }; // FIXME type error
 
 		// mock service is very slow
 		// const auth = await transferservice.authorizeTransaction();

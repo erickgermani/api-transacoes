@@ -1,32 +1,31 @@
 import request from 'supertest';
 
-import app from '../../src';
-import knex from '../../src/database/knex';
-import userService from '../../src/services/user';
+import app from '../../../src';
+import knex from '../../../src/database/knex';
+import shopkeeperService from '../../../src/services/shopkeeper';
 
-const SIGNIN_ROUTE = '/signin';
-const SIGNUP_ROUTE = '/signup';
+const SIGNIN_ROUTE = '/shopkeeper/signin';
+const SIGNUP_ROUTE = '/shopkeeper/signup';
 
 beforeAll(async () => {
-	await knex('transfers').del();
-	await knex('users').del();
+	await knex('shopkeepers').del();
 });
 
-describe('Ao tentar criar uma conta de usuário', () => {
+describe('Ao tentar criar uma conta de lojista', () => {
 	let id: number;
 
 	describe('... com parâmetros válidos', () => {
 		test('Deve criar uma conta com sucesso', async () => {
-			const name = 'Erick Germani';
+			const name = 'Lojista Premium';
 
-			const userPayload = {
+			const shopkeeperPayload = {
 				name,
-				cpf: '52998224725',
-				mail: 'erick@mail.com',
+				cnpj: '64140333000107',
+				mail: 'lojista@mail.com',
 				passwd: '123456',
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
+			const res = await request(app).post(SIGNUP_ROUTE).send(shopkeeperPayload);
 
 			id = res.body.id;
 
@@ -36,7 +35,7 @@ describe('Ao tentar criar uma conta de usuário', () => {
 		});
 
 		test('Deve salvar a senha criptografada', async () => {
-			const userDB = await userService.findOne({ id });
+			const userDB = await shopkeeperService.findOne({ id });
 
 			expect(userDB.passwd).not.toBeUndefined();
 			expect(userDB.passwd).not.toBe('123456');
@@ -45,45 +44,45 @@ describe('Ao tentar criar uma conta de usuário', () => {
 
 	describe('... com parâmetros inválidos', () => {
 		test('Não deve criar uma conta com email duplicado', async () => {
-			const userPayload = {
-				name: 'Erick Germani',
-				cpf: '49185933058',
-				mail: 'erick@mail.com',
+			const shopkeeperPayload = {
+				name: 'Lojista Premium',
+				cnpj: '64140333000107',
+				mail: 'lojista@mail.com',
 				passwd: '123456',
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
+			const res = await request(app).post(SIGNUP_ROUTE).send(shopkeeperPayload);
 
 			expect(res.status).toBe(400);
 			expect(res.body.error).toBe('Já existe um usuário cadastrado com este email');
 		});
 
-		test('Não deve criar uma conta com cpf duplicado', async () => {
-			const userPayload = {
-				name: 'Erick Germani',
-				cpf: '52998224725',
-				mail: 'germani@mail.com',
+		test('Não deve criar uma conta com cnpj duplicado', async () => {
+			const shopkeeperPayload = {
+				name: 'Lojista Premium',
+				cnpj: '64140333000107',
+				mail: 'lojista1@mail.com',
 				passwd: '123456',
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
+			const res = await request(app).post(SIGNUP_ROUTE).send(shopkeeperPayload);
 
 			expect(res.status).toBe(400);
-			expect(res.body.error).toBe('Já existe um usuário cadastrado com este cpf');
+			expect(res.body.error).toBe('Já existe um usuário cadastrado com este CNPJ');
 		});
 
-		test('Não deve criar uma conta com cpf inválido', async () => {
-			const userPayload = {
-				name: 'Erick Germani',
-				cpf: Date.now().toString(),
-				mail: Date.now() + '@mail.com',
+		test('Não deve criar uma conta com cnpj inválido', async () => {
+			const shopkeeperPayload = {
+				name: 'Lojista Premium',
+				cnpj: '64140333000108',
+				mail: 'lojista@mail.com',
 				passwd: '123456',
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
+			const res = await request(app).post(SIGNUP_ROUTE).send(shopkeeperPayload);
 
 			expect(res.status).toBe(400);
-			expect(res.body.error).toBe('CPF inválido');
+			expect(res.body.error).toBe('CNPJ inválido');
 		});
 	});
 
@@ -91,57 +90,52 @@ describe('Ao tentar criar uma conta de usuário', () => {
 		const testTemplate = async (
 			params: {
 				name?: string;
-				cpf?: string;
+				cnpj?: string;
 				mail?: string;
 				passwd?: string;
 			},
 			fieldError: string
 		) => {
-			const userPayload = {
-				name: 'Erick Germani',
-				cpf: Date.now().toString(),
+			const shopkeeperPayload = {
+				name: 'Lojista Premium',
+				cnpj: Date.now().toString(),
 				mail: Date.now() + '@mail.com',
 				passwd: '123456',
 				...params,
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
+			const res = await request(app).post(SIGNUP_ROUTE).send(shopkeeperPayload);
 			expect(res.status).toBe(400);
 			expect(res.body.error).toBe(fieldError + ' é um atributo obrigatório');
 		};
 
 		test('Não deve criar uma conta sem nome', () => testTemplate({ name: '' }, 'Nome'));
 		test('Não deve criar uma conta sem senha', () => testTemplate({ passwd: '' }, 'Senha'));
-		test('Não deve criar uma conta sem cpf', () => testTemplate({ cpf: '' }, 'CPF'));
+		test('Não deve criar uma conta sem cnpj', () => testTemplate({ cnpj: '' }, 'CNPJ'));
 		test('Não deve criar uma conta sem email', () => testTemplate({ mail: '' }, 'Email'));
 	});
 });
 
 describe('Ao solicitar autenticação', () => {
 	test('Deve receber token ao logar', async () => {
-		const userPayload = {
-			mail: 'erick@mail.com',
+		const shopkeeperPayload = {
+			mail: 'lojista@mail.com',
 			passwd: '123456',
 		};
 
-		const res = await request(app).post(SIGNIN_ROUTE).send(userPayload);
+		const res = await request(app).post(SIGNIN_ROUTE).send(shopkeeperPayload);
 		expect(res.status).toBe(200);
 		expect(res.body).toHaveProperty('token');
 	});
 
 	test('Não deve autenticar com credenciais incorretas', async () => {
-		const userPayload = {
-			mail: 'erick@mail.com',
+		const shopkeeperPayload = {
+			mail: 'lojista@mail.com',
 			passwd: '12345678',
 		};
 
-		const res = await request(app).post(SIGNIN_ROUTE).send(userPayload);
+		const res = await request(app).post(SIGNIN_ROUTE).send(shopkeeperPayload);
 		expect(res.status).toBe(400);
 		expect(res.body.error).toBe('Credenciais incorretas');
 	});
-});
-
-test('Não deve acessar uma rota protegida sem token', async () => {
-	const res = await request(app).get('/v0');
-	expect(res.status).toBe(401);
 });

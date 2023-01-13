@@ -1,5 +1,6 @@
 import express from 'express';
-import authRoutes from '../routes/auth';
+import userAuthRoutes from '../routes/auth';
+import shopkeeperAuthRoutes from '../routes/shopkeeper/auth';
 import transferRoutes from '../routes/transfer';
 import authenticate from './passport';
 
@@ -12,7 +13,8 @@ router.get('/', (req, res) => {
 	res.status(200).json({ message: 'Hello World sz' });
 });
 
-router.use('/', authRoutes);
+router.use('/', userAuthRoutes);
+router.use('/shopkeeper', shopkeeperAuthRoutes);
 router.use('/v0', authenticate(), protectedRouter);
 
 export default router;
