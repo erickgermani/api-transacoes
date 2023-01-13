@@ -6,10 +6,6 @@ import { IUser } from '../interfaces';
 
 const MAIN_DATABASE = 'users';
 
-const findAll = () => {
-	return knex(MAIN_DATABASE).select(['id', 'name', 'mail']);
-};
-
 const findOne = (filter = {}) => {
 	return knex(MAIN_DATABASE).where(filter).first();
 };
@@ -94,6 +90,6 @@ const updateBalance = async (id: number, amount: number) => {
 	return res;
 };
 
-const userService = { findAll, findOne, save, getBalance, updateBalance, validate };
+const userService = { findOne, save, getBalance, updateBalance, validate };
 
 export default userService;

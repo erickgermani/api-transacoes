@@ -19,14 +19,14 @@ describe('Ao tentar criar uma conta', () => {
 		test('Deve criar uma conta com sucesso', async () => {
 			const name = 'Erick Germani';
 
-			const user = {
+			const userPayload = {
 				name,
 				cpf: '52998224725',
 				mail: 'erick@mail.com',
 				passwd: '123456',
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(user);
+			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
 
 			id = res.body.id;
 
@@ -45,42 +45,42 @@ describe('Ao tentar criar uma conta', () => {
 
 	describe('... com parâmetros inválidos', () => {
 		test('Não deve criar uma conta com email duplicado', async () => {
-			const user = {
+			const userPayload = {
 				name: 'Erick Germani',
 				cpf: '49185933058',
 				mail: 'erick@mail.com',
 				passwd: '123456',
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(user);
+			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
 
 			expect(res.status).toBe(400);
 			expect(res.body.error).toBe('Já existe um usuário cadastrado com este email');
 		});
 
 		test('Não deve criar uma conta com cpf duplicado', async () => {
-			const user = {
+			const userPayload = {
 				name: 'Erick Germani',
 				cpf: '52998224725',
 				mail: 'germani@mail.com',
 				passwd: '123456',
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(user);
+			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
 
 			expect(res.status).toBe(400);
 			expect(res.body.error).toBe('Já existe um usuário cadastrado com este cpf');
 		});
 
 		test('Não deve criar uma conta com cpf inválido', async () => {
-			const user = {
+			const userPayload = {
 				name: 'Erick Germani',
 				cpf: Date.now().toString(),
 				mail: Date.now() + '@mail.com',
 				passwd: '123456',
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(user);
+			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
 
 			expect(res.status).toBe(400);
 			expect(res.body.error).toBe('CPF inválido');
@@ -97,7 +97,7 @@ describe('Ao tentar criar uma conta', () => {
 			},
 			fieldError: string
 		) => {
-			const user = {
+			const userPayload = {
 				name: 'Erick Germani',
 				cpf: Date.now().toString(),
 				mail: Date.now() + '@mail.com',
@@ -105,7 +105,7 @@ describe('Ao tentar criar uma conta', () => {
 				...params,
 			};
 
-			const res = await request(app).post(SIGNUP_ROUTE).send(user);
+			const res = await request(app).post(SIGNUP_ROUTE).send(userPayload);
 			expect(res.status).toBe(400);
 			expect(res.body.error).toBe(fieldError + ' é um atributo obrigatório');
 		};
@@ -119,23 +119,23 @@ describe('Ao tentar criar uma conta', () => {
 
 describe('Ao solicitar autenticação', () => {
 	test('... Deve receber token ao logar', async () => {
-		const payload = {
+		const userPayload = {
 			mail: 'erick@mail.com',
 			passwd: '123456',
 		};
 
-		const res = await request(app).post(SIGNIN_ROUTE).send(payload);
+		const res = await request(app).post(SIGNIN_ROUTE).send(userPayload);
 		expect(res.status).toBe(200);
 		expect(res.body).toHaveProperty('token');
 	});
 
 	test('... Não deve autenticar com credenciais incorretas', async () => {
-		const payload = {
+		const userPayload = {
 			mail: 'erick@mail.com',
 			passwd: '12345678',
 		};
 
-		const res = await request(app).post(SIGNIN_ROUTE).send(payload);
+		const res = await request(app).post(SIGNIN_ROUTE).send(userPayload);
 		expect(res.status).toBe(400);
 		expect(res.body.error).toBe('Credenciais incorretas');
 	});
