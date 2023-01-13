@@ -5,7 +5,7 @@ import { IUser } from '../interfaces';
 let user2: IUser;
 
 beforeAll(async () => {
-	await knex('transactions').del();
+	await knex('transfers').del();
 	await knex('users').del();
 
 	const payload = {
@@ -45,7 +45,7 @@ describe('Ao efetuar uma transferência', () => {
 			payee: userId,
 		};
 
-		const transactionId = (await knex('transactions').insert(transactionPayload, 'id'))[0].id;
+		const transactionId = (await knex('transfers').insert(transactionPayload, 'id'))[0].id;
 
 		const res = mailService.addTransactionInCrontab(transactionId);
 

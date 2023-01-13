@@ -5,7 +5,7 @@ import app from '../../src';
 import knex from '../../src/database/knex';
 import userService from '../../src/services/user';
 
-const MAIN_ROUTE = '/v0/transaction';
+const MAIN_ROUTE = '/v0/transfer';
 
 let token: string;
 
@@ -21,7 +21,7 @@ let user2: {
 };
 
 beforeAll(async () => {
-	await knex('transactions').del();
+	await knex('transfers').del();
 	await knex('users').del();
 
 	const payload = [

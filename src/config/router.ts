@@ -1,10 +1,10 @@
 import express from 'express';
 import authRoutes from '../routes/auth';
-import transactionRoutes from '../routes/transaction';
+import transferRoutes from '../routes/transfer';
 import authenticate from './passport';
 
 const protectedRouter = express.Router();
-protectedRouter.use('/transaction', transactionRoutes);
+protectedRouter.use('/transfer', transferRoutes);
 
 const router = express.Router();
 

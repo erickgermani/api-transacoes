@@ -8,7 +8,7 @@ const SIGNIN_ROUTE = '/signin';
 const SIGNUP_ROUTE = '/signup';
 
 beforeAll(async () => {
-	await knex('transactions').del();
+	await knex('transfers').del();
 	await knex('users').del();
 });
 

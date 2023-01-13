@@ -4,7 +4,7 @@ import ValidationError from '../errors/ValidationError';
 import { ITransaction } from '../interfaces';
 import userService from './user';
 
-const MAIN_DATABASE = 'transactions';
+const MAIN_DATABASE = 'transfers';
 
 const validate = async (t: ITransaction) => {
 	if (typeof t.description !== 'string' || !t.description.length)
@@ -45,6 +45,6 @@ const save = async (t: ITransaction) => {
 	return await knex(MAIN_DATABASE).insert(t, ['*']);
 };
 
-const transactionService = { save, validate, authorizeTransaction };
+const transferService = { save, validate, authorizeTransaction };
 
-export default transactionService;
+export default transferService;
