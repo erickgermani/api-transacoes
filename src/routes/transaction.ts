@@ -24,11 +24,7 @@ router.post('/', validate, async (req: Request, res: Response, next: NextFunctio
 		// @ts-expect-error will be fixed
 		const t: ITransaction = { ...req.body, payer: req.user.id }; // FIXME type error
 
-		// mock service is very slow
-		// const auth = await transactionService.authorizeTransaction();
-		const auth = {
-			message: 'Autorizado',
-		};
+		const auth = await transactionService.authorizeTransaction();
 
 		if (auth.message !== 'Autorizado') throw new AuthorizationError('Transação não autorizada');
 

@@ -36,9 +36,15 @@ const validate = async (t: ITransfer) => {
 };
 
 const authorizeTransfer = async () => {
+	/* mock service is very slow
 	const res = await fetch('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6');
 
 	return await res.json();
+	*/
+
+	return {
+		message: 'Autorizado',
+	};
 };
 
 const save = async (t: ITransfer) => {

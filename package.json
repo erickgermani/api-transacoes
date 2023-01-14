@@ -1,12 +1,12 @@
 {
 	"name": "api-transacoes",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"description": "",
 	"main": "index.ts",
 	"scripts": {
 		"dev": "PORT=3000 NODE_ENV=development JWT_SECRET=SUCESSO ts-node-dev src/server.ts",
 		"test": "NODE_ENV=development JWT_SECRET=SUCESSO jest --coverage --detectOpenHandles --forceExit",
-		"sm": "NODE_ENV=development JWT_SECRET=SUCESSO jest --watch --detectOpenHandles",
+		"sm": "NODE_ENV=development JWT_SECRET=SUCESSO jest --watchAll --detectOpenHandles",
 		"lint": "eslint '{src,test}/**/*.ts' --fix",
 		"migrate": "knex migrate:latest"
 	},

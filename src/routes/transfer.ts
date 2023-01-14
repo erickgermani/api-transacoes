@@ -23,11 +23,7 @@ router.post('/', validate, async (req: Request, res: Response, next: NextFunctio
 		// @ts-expect-error will be fixed
 		const t: ITransfer = { ...req.body, payer: req.user.id }; // FIXME type error
 
-		// mock service is very slow
-		// const auth = await transferservice.authorizeTransaction();
-		const auth = {
-			message: 'Autorizado',
-		};
+		const auth = await transferService.authorizeTransfer();
 
 		if (auth.message !== 'Autorizado') throw new AuthorizationError('Transação não autorizada');
 
