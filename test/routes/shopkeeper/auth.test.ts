@@ -8,6 +8,9 @@ const SIGNIN_ROUTE = '/shopkeeper/signin';
 const SIGNUP_ROUTE = '/shopkeeper/signup';
 
 beforeAll(async () => {
+	await knex('transfers').del();
+	await knex('transactions').del();
+	await knex('users').del();
 	await knex('shopkeepers').del();
 });
 

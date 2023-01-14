@@ -2,11 +2,21 @@ import { v4 as uuid } from 'uuid';
 import MailError from '../errors/MailError';
 import logger from '../config/logger';
 
-const addTransactionInCrontab = (id: number) => {
+const addTransferInCrontab = (id: number) => {
 	const res = {
 		message:
 			`... O email da transferência ${id} não foi enviado.` +
 			' Agendada tentativa de reenvio.',
+		status: true,
+	};
+
+	return res;
+};
+
+const addTransactionInCrontab = (id: number) => {
+	const res = {
+		message:
+			`... O email da transação ${id} não foi enviado.` + ' Agendada tentativa de reenvio.',
 		status: true,
 	};
 
@@ -35,6 +45,6 @@ const send = async () => {
 	}
 };
 
-const mailService = { send, addTransactionInCrontab };
+const mailService = { send, addTransferInCrontab, addTransactionInCrontab };
 
 export default mailService;

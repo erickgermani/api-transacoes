@@ -13,14 +13,21 @@ interface IShopkeeper extends IAccount {
 	cnpj: string;
 }
 
-interface ITransfer {
+interface ITrade {
 	id: number;
 	description: string;
 	date: string;
 	amount: number;
 	status: 'ok' | 'under_review' | 'canceled';
 	payer: number;
+}
+
+interface ITransfer extends ITrade {
 	payee: number;
 }
 
-export type { IUser, IShopkeeper, ITransfer };
+interface ITransaction extends ITrade {
+	shopkeeper: number;
+}
+
+export type { IUser, IShopkeeper, ITransfer, ITransaction };

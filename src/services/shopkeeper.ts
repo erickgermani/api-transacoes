@@ -73,7 +73,6 @@ const checkCNPJ = (cnpj: string) => {
 
 		return true;
 	} catch (err) {
-		console.log(err);
 		return false;
 	}
 };

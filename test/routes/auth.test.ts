@@ -9,7 +9,9 @@ const SIGNUP_ROUTE = '/signup';
 
 beforeAll(async () => {
 	await knex('transfers').del();
+	await knex('transactions').del();
 	await knex('users').del();
+	await knex('shopkeepers').del();
 });
 
 describe('Ao tentar criar uma conta de usuário', () => {
